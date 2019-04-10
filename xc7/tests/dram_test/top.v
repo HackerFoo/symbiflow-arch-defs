@@ -59,7 +59,7 @@ module top (
         .IS_DUAL_PORT(1),
         .ADDRESS_STEP(1),
         // 64-bit LUT memories are 0-63
-        .MAX_ADDRESS(63),
+        .MAX_ADDRESS(63)
     ) dram_test (
         .rst(!nrst),
         .clk(clk),

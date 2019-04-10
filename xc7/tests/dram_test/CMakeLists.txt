@@ -6,11 +6,14 @@ foreach(file ram_test.v top.v)
     list(APPEND SOURCES ${file})
 endforeach()
 
+add_file_target(FILE ram_test_tb.v SCANNER_TYPE verilog)
+
 add_fpga_target(
   NAME ram_test
   BOARD basys3
   INPUT_IO_FILE ../common/basys3.pcf
   SOURCES ${UART_SOURCES} ${symbiflow-arch-defs_SOURCE_DIR}/library/lfsr.v ${SOURCES}
+  TESTBENCH_SOURCES ram_test_tb.v
   EXPLICIT_ADD_FILE_TARGET
   )
 
