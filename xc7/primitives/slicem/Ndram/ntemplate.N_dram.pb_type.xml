@@ -128,7 +128,7 @@
     <interconnect>
       <direct name="CLK" input="{N}_DRAM.CLK" output="SPRAM32.CLK" />
       <direct name="A" input="{N}_DRAM.A[4:0]" output="SPRAM32.A[4:0]" />
-      <direct name="{N}I" input="{N}_DRAM.{N}I" output="SPRAM32.DI1" />
+      <direct name="{N}I" input="{N}_DRAM.{N}I" output="SPRAM32.DI2" />
       <direct name="DI2" input="{N}_DRAM.DI2" output="SPRAM32.DI2" />
       <direct name="WE" input="{N}_DRAM.WE" output="SPRAM32.WE" />
 

@@ -35,10 +35,10 @@
   <delay_constant max="10e-12" in_port="SPRAM32.WE"  out_port="SPRAM32.O5" />
   <T_setup    value="10e-12" port="SPRAM32.DI1"  clock="CLK" />
   <T_clock_to_Q   max="10e-12" port="SPRAM32.DI1"  clock="CLK" />
-  <delay_constant max="10e-12" in_port="SPRAM32.DI1"  out_port="SPRAM32.O6" />
+  <delay_constant max="10e-12" in_port="SPRAM32.DI1"  out_port="SPRAM32.O5" />
   <T_setup    value="10e-12" port="SPRAM32.DI2"  clock="CLK" />
   <T_clock_to_Q   max="10e-12" port="SPRAM32.DI2"  clock="CLK" />
-  <delay_constant max="10e-12" in_port="SPRAM32.DI2"  out_port="SPRAM32.O5" />
+  <delay_constant max="10e-12" in_port="SPRAM32.DI2"  out_port="SPRAM32.O6" />
   <metadata>
     <meta name="fasm_params">
       INIT[31:0] = INIT_00

@@ -64,8 +64,8 @@
   <input_ports>
    <port is_clock="1"   name="CLK"  />
    <port clock="CLK"    name="WE"  combinational_sink_ports="O6 O5" />
-   <port clock="CLK"    name="DI1" combinational_sink_ports="O6" />
-   <port clock="CLK"    name="DI2" combinational_sink_ports="O5" />
+   <port clock="CLK"    name="DI1" combinational_sink_ports="O5" />
+   <port clock="CLK"    name="DI2" combinational_sink_ports="O6" />
    <port clock="CLK"    name="WA"  combinational_sink_ports="O6 O5" />
 
    <port                name="A"   combinational_sink_ports="O6 O5" />
@@ -79,8 +79,8 @@
   <input_ports>
    <port is_clock="1"   name="CLK"  />
    <port clock="CLK"    name="WE"  combinational_sink_ports="O6 O5" />
-   <port clock="CLK"    name="DI1" combinational_sink_ports="O6" />
-   <port clock="CLK"    name="DI2" combinational_sink_ports="O5" />
+   <port clock="CLK"    name="DI1" combinational_sink_ports="O5" />
+   <port clock="CLK"    name="DI2" combinational_sink_ports="O6" />
    <port clock="CLK"    name="A"   combinational_sink_ports="O6 O5" />
   </input_ports>
   <output_ports>
