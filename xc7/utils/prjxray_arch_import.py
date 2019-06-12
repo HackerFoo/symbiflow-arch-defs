@@ -351,13 +351,20 @@ def get_tiles(conn, g, roi, synth_loc_map, synth_tile_map, tile_types):
         yield vpr_tile_type, grid_x, grid_y, fasm_tile_prefix
 
 
-def add_synthetic_tiles(model_xml, complexblocklist_xml, tiles_xml):
+def add_synthetic_io_tiles(complexblocklist_xml, tiles_xml):
     create_synth_io_tiles(
         complexblocklist_xml, tiles_xml, 'SYN-INPAD', is_input=True
     )
     create_synth_io_tiles(
         complexblocklist_xml, tiles_xml, 'SYN-OUTPAD', is_input=False
     )
+
+    return {
+        'output': 'SYN-INPAD',
+        'input': 'SYN-OUTPAD',
+    }
+
+def add_synthetic_constant_tiles(model_xml, complexblocklist_xml, tiles_xml):
     create_synth_constant_tiles(
         model_xml, complexblocklist_xml, tiles_xml, 'SYN-VCC', 'VCC'
     )
@@ -366,8 +373,6 @@ def add_synthetic_tiles(model_xml, complexblocklist_xml, tiles_xml):
     )
 
     return {
-        'output': 'SYN-INPAD',
-        'input': 'SYN-OUTPAD',
         'VCC': 'SYN-VCC',
         'GND': 'SYN-GND',
     }
@@ -454,6 +459,7 @@ def main():
     synth_tiles = {}
     synth_tiles['tiles'] = {}
     synth_loc_map = {}
+    synth_tile_map = {}
     roi = None
     if args.use_roi:
         with open(args.use_roi) as f:
@@ -470,9 +476,14 @@ def main():
             y2=j['info']['GRID_Y_MAX'],
         )
 
-        synth_tile_map = add_synthetic_tiles(
+        synth_tile_map = add_synthetic_constant_tiles(
             model_xml, complexblocklist_xml, tiles_xml
         )
+
+        if j['ports']:
+            synth_tile_map.update(
+                add_synthetic_io_tiles(complexblocklist_xml,
+                                       tiles_xml))
 
         for _, tile_info in synth_tiles['tiles'].items():
             assert tuple(tile_info['loc']) not in synth_loc_map
