@@ -462,6 +462,9 @@ def import_tile(db, args):
 
             site_type = db.get_site_type(site.type)
 
+            if args.generate_missing_pins:
+                print("\nsite.type: {}".format(site.type))
+
             interconnect_xml.append(ET.Comment(" Tile->Site "))
             for site_pin in sorted(site.site_pins,
                                    key=lambda site_pin: site_pin.name):
@@ -469,15 +472,19 @@ def import_tile(db, args):
                     continue
 
                 port = find_port(site_pin.name, site_type_ports[site_instance])
-                if port is None:
-                    print(
-                        "*** WARNING *** Didn't find port for name {} for site type {}"
-                        .format(site_pin.name, site.type),
-                        file=sys.stderr
-                    )
-                    continue
-
                 site_type_pin = site_type.get_site_pin(site_pin.name)
+
+                if port is None:
+                    if args.generate_missing_pins:
+                        direction = "input" if site_type_pin.direction == prjxray.site_type.SitePinDirection.IN else "output"
+                        print("<{} name=\"{}\" num_pins=\"1\"/>".format(direction, site_pin.name))
+                    else:
+                        print(
+                            "*** WARNING *** Didn't find port for name {} for site type {}"
+                            .format(site_pin.name, site.type),
+                            file=sys.stderr
+                        )
+                    continue
 
                 if site_type_pin.direction == prjxray.site_type.SitePinDirection.IN:
                     add_direct(
@@ -767,6 +774,12 @@ def main():
         action='store_true',
         help=
         "Typically a tile can treat the sites within the tile as independent.  For tiles where this is not true, fused sites only imports 1 primatative for the entire tile, which should be named the same as the tile type."
+    )
+
+    parser.add_argument(
+        '--generate_missing_pins',
+        action='store_true',
+        help="Print missing pin warnings as XML."
     )
 
     args = parser.parse_args()
