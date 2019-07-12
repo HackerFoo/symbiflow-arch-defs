@@ -270,6 +270,8 @@ def start_pb_type(tile_name, import_tiles, f_pin_assignments, input_wires, outpu
 
     return pb_type_xml
 
+def site_id(site):
+    return site.type + "." + site.name
 
 def import_tile(db, args):
     """ Create a root-level pb_type with the pin names that match tile wires.
@@ -385,11 +387,14 @@ def import_tile(db, args):
     if not args.fused_sites:
         site_type_count = {}
         site_prefixes = {}
-        cells_idx = []
+        cells_idx = dict()
 
         site_type_ports = {}
         for site in sites:
             if site.type in ignored_site_types:
+                continue
+
+            if args.select_y is not None and args.select_y != site.y:
                 continue
 
             if site.type not in site_type_count:
@@ -397,7 +402,7 @@ def import_tile(db, args):
                 site_prefixes[site.type] = []
 
             cell_idx = site_type_count[site.type]
-            cells_idx.append(cell_idx)
+            cells_idx[site_id(site)] = cell_idx
             site_type_count[site.type] += 1
             site_prefix = '{}_X{}'.format(site.type, site.x)
 
@@ -456,7 +461,10 @@ def import_tile(db, args):
             if site.type in ignored_site_types:
                 continue
 
-            site_idx = cells_idx[idx]
+            if args.select_y is not None and args.select_y != site.y:
+                continue
+
+            site_idx = cells_idx[site_id(site)]
             site_instance = site_type_instances[site.type][site_idx]
             site_name = cell_names[site_instance]
 
@@ -734,6 +742,8 @@ def main():
     parser.add_argument('--tile', help="""Tile to generate for""")
 
     parser.add_argument('--import_tiles', help="""Comma seperated list of tiles to import, defaults to --tile if not set""")
+
+    parser.add_argument('--select_y', type=int, help="""Select tiles with matching Y coordinate""")
 
     parser.add_argument(
         '--site_directory', help="""Diretory where sites are defined"""

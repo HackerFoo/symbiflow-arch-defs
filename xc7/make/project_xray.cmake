@@ -71,7 +71,7 @@ function(PROJECT_XRAY_TILE)
   # ~~~
 
   set(options FUSED_SITES SITE_AS_TILE)
-  set(oneValueArgs PART TILE)
+  set(oneValueArgs PART TILE SELECT_Y)
   set(multiValueArgs SITE_TYPES EQUIVALENT_TILES IMPORT_TILES)
   cmake_parse_arguments(
     PROJECT_XRAY_TILE
@@ -115,6 +115,9 @@ function(PROJECT_XRAY_TILE)
       string(REPLACE ";" "," IMPORT_TILES_COMMA "${PROJECT_XRAY_TILE_IMPORT_TILES}")
       set(IMPORT_TILES_ARGS "--import_tiles" ${IMPORT_TILES_COMMA})
   endif()
+  if(PROJECT_XRAY_TILE_SELECT_Y)
+      set(SELECT_Y_ARG "--select_y" ${PROJECT_XRAY_TILE_SELECT_Y})
+  endif()
 
   add_custom_command(
     OUTPUT ${TILE}.pb_type.xml ${TILE}.model.xml
@@ -123,6 +126,7 @@ function(PROJECT_XRAY_TILE)
     --part ${PROJECT_XRAY_TILE_PART}
     --tile ${PROJECT_XRAY_TILE_TILE}
     ${IMPORT_TILES_ARGS}
+    ${SELECT_Y_ARG}
     --site_directory ${symbiflow-arch-defs_BINARY_DIR}/xc7/primitives
     --site_types ${SITE_TYPES_COMMA}
     --pin_assignments ${PIN_ASSIGNMENTS}
