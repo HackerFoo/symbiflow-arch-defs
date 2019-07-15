@@ -13,5 +13,38 @@
   <input name="PU_INT_EN" num_pins="1"/>
   <input name="T" num_pins="1"/>
   <output name="T_OUT" num_pins="1"/>
+  <pb_type name="INBUF" blif_model=".subckt INBUF" num_pb="1">
+    <input name="DIFFI_IN" num_pins="1"/>
+    <input name="IBUFDISABLE" num_pins="1"/>
+    <input name="INTERMDISABLE" num_pins="1"/>
+    <input name="PAD" num_pins="1"/>
+    <output name="OUT" num_pins="1"/>
+  </pb_type>
+  <pb_type name="OUTBUF" blif_model=".subckt OUTBUF" num_pb="1">
+    <input name="IN" num_pins="1"/>
+    <input name="TRI" num_pins="1"/>
+    <output name="OUT" num_pins="1"/>
+  </pb_type>
+  <pb_type name="inpad" blif_model=".input" num_pb="1">
+    <output name="inpad" num_pins="1"/>
+    <metadata>
+      <meta name="type">bel</meta>
+      <meta name="subtype">input</meta>
+    </metadata>
+  </pb_type>
+  <pb_type name="outpad" blif_model=".output" num_pb="1">
+    <input name="outpad" num_pins="1"/>
+    <metadata>
+      <meta name="type">bel</meta>
+      <meta name="subtype">output</meta>
+    </metadata>
+  </pb_type>
+  <interconnect>
+    <direct name="I" input="IOB33M.O" output="OUTBUF.IN"/>
+    <direct name="T" input="IOB33M.T" output="OUTBUF.TRI"/>
+    <direct name="O" input="INBUF.OUT" output="IOB33M.I"/>
+    <direct name="to_outpad" input="OUTBUF.OUT" output="outpad.outpad"/>
+    <direct name="to_inpad" input="inpad.inpad" output="INBUF.PAD"/>
+  </interconnect>
   <!-- TODO -->
 </pb_type>

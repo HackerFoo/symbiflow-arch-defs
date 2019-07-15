@@ -1,2 +1,22 @@
 <models xmlns:xi="http://www.w3.org/2001/XInclude">
+  <model name="OUTBUF">
+    <input_ports>
+      <port name="IN"/>
+      <port name="TRI"/>
+    </input_ports>
+    <output_ports>
+      <port name="OUT"/>
+    </output_ports>
+  </model>
+  <model name="INBUF">
+    <input_ports>
+      <port name="DIFFI_IN"/>
+      <port name="IBUFDISABLE"/>
+      <port name="INTERMDISABLE"/>
+      <port name="PAD"/>
+    </input_ports>
+    <output_ports>
+      <port name="OUT"/>
+    </output_ports>
+  </model>
 </models>

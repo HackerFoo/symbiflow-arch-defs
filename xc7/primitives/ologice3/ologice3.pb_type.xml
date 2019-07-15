@@ -32,5 +32,8 @@
   <output name="TQ" num_pins="1"/>
   <input name="SHIFTIN1" num_pins="1"/>
   <input name="SHIFTIN2" num_pins="1"/>
+  <interconnect>
+    <direct name="D1_OQ" input="OLOGICE3.D1" output="OLOGICE3.OQ"/>
+  </interconnect>
   <!-- TODO -->
 </pb_type>
