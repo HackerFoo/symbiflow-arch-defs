@@ -289,7 +289,7 @@ def get_fasm_tile_prefix(conn, g, tile_pkey, site_as_tile_pkey):
     return tile_prefix
 
 
-def get_tiles(conn, g, roi, synth_loc_map, synth_tile_map, tile_types):
+def get_tiles(conn, g, roi, synth_loc_map, synth_tile_map, tile_types, tile_map):
     """ Yields tiles in grid.
 
     Yields
@@ -306,6 +306,7 @@ def get_tiles(conn, g, roi, synth_loc_map, synth_tile_map, tile_types):
     c2 = conn.cursor()
 
     only_emit_roi = roi is not None
+    tile_types += tile_map.keys()
 
     for tile_pkey, grid_x, grid_y, phy_tile_pkey, tile_type_pkey, site_as_tile_pkey in c.execute(
             """
@@ -342,7 +343,9 @@ def get_tiles(conn, g, roi, synth_loc_map, synth_tile_map, tile_types):
             # Tile is outside ROI, skip it
             continue
 
-        vpr_tile_type = add_vpr_tile_prefix(tile_type)
+        mapped_tile_type = tile_map[tile_type] if tile_type in tile_map else tile_type
+
+        vpr_tile_type = add_vpr_tile_prefix(mapped_tile_type)
 
         fasm_tile_prefix = get_fasm_tile_prefix(
             conn, g, tile_pkey, site_as_tile_pkey
@@ -515,6 +518,7 @@ def main():
                 synth_loc_map=synth_loc_map,
                 synth_tile_map=synth_tile_map,
                 tile_types=tile_types,
+                tile_map={ 'RIOI3' : 'IOPAD' } # TODO read from argument
         ):
             single_xml = ET.SubElement(
                 fixed_layout_xml, 'single', {
