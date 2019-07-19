@@ -158,14 +158,14 @@ class Tile(object):
         be initial set to the Site objects contained within the original
         phy_tile.
 
-        Invariant: Each Site object will be contained within exactly one Tile
+        Invariant: Each Site object will be contained within exactly one Tile (***)
         object.
 
     split_sites : boolean
         True if this tile was split.
 
         Invariant: Each split tile will contain exactly one Site object.
-        Invariant: Two tiles that were split cannot be merged, otherwise the
+        Invariant: Two tiles that were split cannot be merged, otherwise the (***)
         resulting Tile will have two Sites, potentially from different
         phy_tile_pkey, which cannot be presented using FASm prefixes.
 
@@ -545,7 +545,7 @@ class Grid(object):
             currently supported, so direction must be EAST or WEST.
 
         """
-        # FIXME: Add row split support, might be useful on RIOB or LIOB tiles.
+        # FIXME: Add row split support, might be useful on RIOB or LIOB tiles. (***)
         assert split_direction in [EAST, WEST], split_direction
 
         tiles_seen = set()
