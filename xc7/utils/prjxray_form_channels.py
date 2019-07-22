@@ -1297,6 +1297,10 @@ def create_vpr_grid(conn):
     write_cur.execute('INSERT INTO tile_type(name) VALUES ("SLICEM");')
     slicem_tile_type_pkey = write_cur.lastrowid
 
+    # Create IOPAD tile type.
+    write_cur.execute('INSERT INTO tile_type(name) VALUES ("IOPAD");')
+    iopad_tile_type_pkey = write_cur.lastrowid
+
     slice_types = {
         'SLICEL': slicel_tile_type_pkey,
         'SLICEM': slicem_tile_type_pkey,
@@ -1307,6 +1311,10 @@ def create_vpr_grid(conn):
         'CLBLL_R': tile_splitter.grid.EAST,
         'CLBLM_L': tile_splitter.grid.WEST,
         'CLBLM_R': tile_splitter.grid.EAST,
+    }
+
+    tiles_to_replace = {
+        'RIOI3': iopad_tile_type_pkey,
     }
 
     # Create initial grid using sites and locations from phy_tile's
@@ -1323,6 +1331,10 @@ def create_vpr_grid(conn):
             "SELECT name FROM tile_type WHERE pkey = ?;", (tile_type_pkey, )
         )
         tile_type_name = cur2.fetchone()[0]
+
+        # replace tile type with virtual tile type e.g. RIOI3 -> IOPAD
+        if tile_type_name in tiles_to_replace:
+            tile_type_pbkey = tiles_to_replace[tile_type_name]
 
         sites = []
         site_pkeys = set()
@@ -1361,6 +1373,7 @@ def create_vpr_grid(conn):
 
         sites = sorted(sites, key=lambda s: (s.x, s.y))
 
+        # Build tile_to_tile_type_pkeys
         if tile_type_name in tiles_to_split:
             tile_type_pkeys = []
             for site in sites:
@@ -1449,6 +1462,7 @@ INSERT INTO tile(phy_tile_pkey, tile_type_pkey, site_as_tile_pkey, grid_x, grid_
                 )
             )
         else:
+            # modify tile_type_pbkey for IOPAD
             write_cur.execute(
                 """
 INSERT INTO tile(phy_tile_pkey, tile_type_pkey, grid_x, grid_y) VALUES (
